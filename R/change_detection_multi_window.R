@@ -93,6 +93,10 @@ MultiWindow <- function(y,
     if (class(x) != "matrix") {
       x <- as.matrix(x)
     }
+    # set the random initialization times
+    if (is.null(num_init)) {
+      num_init <- floor(sqrt(dim(x)[1]))
+    }
     if (is.null(prior_range)) {
       #test
       #print("change_point")
