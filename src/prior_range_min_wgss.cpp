@@ -65,7 +65,7 @@ List PriorRangeOrderKmeansCpp(NumericMatrix x,  List prior_range_x, int num_init
 
     // Initialize change points, add N-th observation as the last change point so
     // there are K+1 change points
-    NumericVector change_point(M);
+    NumericVector change_point(K);
     for (int i=0; i < K; i++) {
       NumericVector prior_range(prior_range_x[i]);
       change_point[i] = floor((prior_range[0]-1)+(prior_range[1]-prior_range[0])*runif(1)[0]);
