@@ -134,7 +134,7 @@ ChangePoints <- function(x,point_max=5,penalty="bic",seg_min=1,num_init=NULL,cpp
 #' @param x The data to find change points with dimension N x D, must be matrix
 #' @param K The number of change points.
 #' @param num_init The number of repetition times, in order to avoid local minimal.
-#'                 Default is squared root of number of observations. Must be integer.
+#'                 Default is 10. Must be integer.
 #'
 #' @return
 #'         \item{wgss_sum}{total within segment sum of squared distances to the segment
