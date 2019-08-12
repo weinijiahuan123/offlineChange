@@ -5,7 +5,7 @@
 \title{Detect Number and Location of Change Points of Independent Data with Prior
 Ranges}
 \usage{
-PriorRangeOrderKmeans(x, prior_range_x, num_init = NULL)
+PriorRangeOrderKmeans(x, prior_range_x, num_init = 10)
 }
 \arguments{
 \item{x}{The data to find change points.}
@@ -13,7 +13,7 @@ PriorRangeOrderKmeans(x, prior_range_x, num_init = NULL)
 \item{prior_range_x}{The prior ranges that contain change points.}
 
 \item{num_init}{The number of repetition times, in order to avoid local minimal.
-Default is squared root of number of observations. Must be integer.}
+Default is 10. Must be integer.}
 }
 \value{
 \item{num_change_point}{optimal number of change points.}
