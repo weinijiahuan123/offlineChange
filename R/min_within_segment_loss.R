@@ -40,11 +40,6 @@
 ChangePoints <- function(x,point_max=5,penalty="bic",seg_min=1,num_init=NULL,cpp=TRUE){
   N <- dim(x)[1]
   D <- dim(x)[2]
-  #sigma2<-sum(apply(x,2,var))
-  #wgss_list=list()
-  #wgss_list_penalty=list()
-  #wgss_llist_sigma=list()
-  #wgss_llist_2sigma=list()
   best_wgss_penalty <- Inf
   # Make sure the number of change points is no larger than N-1.
   point_max <- min(point_max,N-1)
@@ -52,13 +47,15 @@ ChangePoints <- function(x,point_max=5,penalty="bic",seg_min=1,num_init=NULL,cpp
   point_max <- max(point_max, 1)
 
   # K = number of change points
-
+  if (penalty == "bc") {
+    bc_part = 0
+    best_wgss_penalty_bc <- Inf
+  }
+  # set the random initialization times
+  if (is.null(num_init)) {
+    num_init <- floor(sqrt(dim(x)[1]))
+  }
   for (K in 1:point_max) {
-    #K=3
-    # set the random initialization times
-    if (is.null(num_init)) {
-      num_init <- floor(sqrt(dim(x)[1]))
-    }
     if (cpp == TRUE) {
       res <- OrderKmeansCpp(x,K,num_init=num_init)
     } else {
@@ -71,28 +68,34 @@ ChangePoints <- function(x,point_max=5,penalty="bic",seg_min=1,num_init=NULL,cpp
     if (min(num_each) < seg_min) {
       break
     }
-    #cat("wgss",wgss,"\n")
-    #cat("num",num_each,"\n")
 
     #get the within segment sum of residual plus penalty
-    #wgss_list=c(wgss_list,wgss)
-    #wgss_penalty_new=wgss+K*penalty
-    #wgss_penalty<-wgss/sigma2+K*penalty
     if (penalty == "bic") {
-      wgss_penalty <- sum(num_each * log(wgss/num_each)) + D * K * log(N)
+      wgss_penalty <- N * log(sum(wgss)/N) + D * K * log(N)
     } else if (penalty == "aic") {
-      wgss_penalty <- sum(num_each * log(wgss/num_each)) + 2 * D * K
+      wgss_penalty <- N * log(sum(wgss)/N) + 2 * D * K
+    } else if (penalty == "bc") {
+      wgss_penalty <- N * log(sum(wgss)/N) + 2 * D * K
+      for (p in (D * (K-1) + 1): (D * K)) {
+        bc_part <- bc_part + 1/p
+      }
+      wgss_penalty_bc <- N * log(sum(wgss)/N) + N^(2/3)*bc_part
+      #print(wgss)
+      #print(change_point)
+      #print(wgss_penalty_bc)
+      #print(sum(num_each * log(wgss/num_each))+ N^(2/3)*bc_part)
     } else if (penalty == "hq") {
-      wgss_penalty <- sum(num_each * log(wgss/num_each)) + D * K * log(log(N))
+      wgss_penalty <- N * log(sum(wgss)/N) + D * K * log(log(N))
     } else {
       wgss_penalty <- do.call(penalty,list(num_each, wgss, D, K, N))
     }
-    #wgss_list_penalty=c(wgss_list_penalty,wgss_penalty_new)
-    #wgss_llist_sigma=c(wgss_llist_sigma,wgss_penalty)
-    #wgss_llist_2sigma=c(wgss_llist_2sigma,wgss/(2*sigma2)+K*penalty)
-    #test
-    #print(penalty)
-    #test
+    if (penalty == "bc") {
+      if (wgss_penalty_bc < best_wgss_penalty_bc) {
+        best_wgss_penalty_bc <- wgss_penalty_bc
+        best_change_point_bc <- change_point
+        best_num_bc <- K
+      }
+    }
 
     #if the new wgss plus penalty is smaller than the previous one, store the new value,
     #get the smallest wgss among different changepoint numbers
@@ -100,14 +103,18 @@ ChangePoints <- function(x,point_max=5,penalty="bic",seg_min=1,num_init=NULL,cpp
       best_wgss_penalty <- wgss_penalty
       best_change_point <- change_point
       best_num <- K
+      if (penalty == "bc") {
+        best_wgss_penalty_bc_aic <- best_wgss_penalty_bc
+        best_change_point_bc_aic <- best_change_point_bc
+        best_num_bc_aic <- best_num_bc
+      }
     }
   }
-  # test
-  #print(wgss_list)
-  #print(wgss_list_penalty)
-  #print(wgss_llist_sigma)
-  #print(wgss_llist_2sigma)
-  # test
+  if (penalty == "bc") {
+    best_wgss_penalty <- best_wgss_penalty_bc_aic
+    best_change_point <- best_change_point_bc_aic
+    best_num <- best_num_bc_aic
+  }
   m_change_point <- list(num_change_point=best_num,change_point=best_change_point)
   return(m_change_point)
 }
