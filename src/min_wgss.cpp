@@ -204,6 +204,7 @@ List OrderKmeansCpp(NumericMatrix x, int K=4, int num_init=10) {
 }
 
 // [[Rcpp::export]]
+
 List PriorRangeOrderKmeansCpp(NumericMatrix x,  List prior_range_x, int num_init=10) {
   if (!Rf_isMatrix(x)) {
     stop("Dataset must be matrix form!");
@@ -236,10 +237,10 @@ List PriorRangeOrderKmeansCpp(NumericMatrix x,  List prior_range_x, int num_init
     
     // Initialize change points, add N-th observation as the last change point so
     // there are K+1 change points
-    NumericVector change_point(M);
-    for (int i=0; i < M; i++) {
+    NumericVector change_point(K);
+    for (int i=0; i < K; i++) {
       NumericVector prior_range(prior_range_x[i]);
-      change_point[i] = floor(prior_range[0]+(prior_range[1]-prior_range[0])*runif(1)[0]);
+      change_point[i] = floor((prior_range[0]-1)+(prior_range[1]-prior_range[0])*runif(1)[0]);
     }
     change_point.push_back(N-1);
     
@@ -263,9 +264,9 @@ List PriorRangeOrderKmeansCpp(NumericMatrix x,  List prior_range_x, int num_init
       int best_ell;
       NumericMatrix best_candidatePart;
       NumericVector prior_range(prior_range_x[i]);
-      if (change_point[i] - prior_range[0] > 0) {
+      if (change_point[i] - (prior_range[0]-1) > 0) {
         // scan all possible part that can be transformed form segment i to i+1
-        for (int ell = 1; ell <= (change_point[i] - prior_range[0]); ell++) {
+        for (int ell = 1; ell <= (change_point[i] - (prior_range[0]-1)); ell++) {
           NumericVector mean_candidatePart = MeanCpp(x(Range((change_point[i]-ell+1),change_point[i]),_));
           // the descrease in wgss of segment i
           NumericVector decrease = ell * num_each[i]/(num_each[i] - ell) * pow((mean_each(i,_) - mean_candidatePart),2);
@@ -301,8 +302,8 @@ List PriorRangeOrderKmeansCpp(NumericMatrix x,  List prior_range_x, int num_init
       } else {
         // consider if we should move the first part of segment i+1
         best_gain_sum = R_NegInf;
-        if (prior_range[1] - change_point[i] > 0) {
-          for (int ell = 1; ell <= (prior_range[1] - change_point[i]); ell++) {
+        if ((prior_range[1]-1) - change_point[i] > 0) {
+          for (int ell = 1; ell <= ((prior_range[1]-1) - change_point[i]); ell++) {
             if (ell < num_each[i+1]) {
               NumericVector mean_candidatePart = MeanCpp(x(Range((change_point[i]+1),change_point[i]+ell),_));
               NumericVector decrease = ell * num_each[i+1]/(num_each[i+1] - ell) * pow((mean_each(i+1,_) - mean_candidatePart),2);
@@ -355,7 +356,6 @@ List PriorRangeOrderKmeansCpp(NumericMatrix x,  List prior_range_x, int num_init
   return List::create(Named("num_change_point") = K,
                       Named("change_point") = best_change_point);
 }
-
 
 // You can include R code blocks in C++ files processed with sourceCpp
 // (useful for testing and development). The R code will be automatically
