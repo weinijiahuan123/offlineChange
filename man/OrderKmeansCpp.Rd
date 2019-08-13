@@ -14,7 +14,7 @@ OrderKmeansCpp(x, K = 4, num_init = 10)
 \item{K}{The number of change points.}
 
 \item{num_init}{The number of repetition times, in order to avoid local minimal.
-Default is squared root of number of observations. Must be integer.}
+Default is 10. Must be integer.}
 }
 \value{
 \item{wgss_sum}{total within segment sum of squared distances to the segment

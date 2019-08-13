@@ -14,10 +14,11 @@ ChangePoints(x, point_max = 5, penalty = "bic", seg_min = 1,
 
 \item{penalty}{Penalty type term. Default is "bic". Users can use other penalty term.}
 
-\item{seg_min}{Minimal segment size, must be positive integer.}
+\item{seg_min}{Minimal segment size between change points at transformed sacle, 
+must be positive integer.}
 
 \item{num_init}{The number of repetition times, in order to avoid local
-minimal. Default is squared root of number of observations. Must be integer.}
+minimum. Default is squared root of number of observations. Must be integer.}
 
 \item{cpp}{Option to accelerate using rcpp. Default is TRUE.}
 }
