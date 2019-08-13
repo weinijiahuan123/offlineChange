@@ -14,9 +14,10 @@
 #' @param x The data to find change points.
 #' @param point_max The largest candidate number of change points.
 #' @param penalty Penalty type term. Default is "bic". Users can use other penalty term.
-#' @param seg_min Minimal segment size, must be positive integer.
+#' @param seg_min Minimal segment size between change points at transformed sacle, 
+#'   must be positive integer.
 #' @param num_init The number of repetition times, in order to avoid local
-#'   minimal. Default is squared root of number of observations. Must be integer.
+#'   minimum. Default is squared root of number of observations. Must be integer.
 #' @param cpp Option to accelerate using rcpp. Default is TRUE.
 #'
 #' @useDynLib offlineChange
@@ -133,7 +134,7 @@ ChangePoints <- function(x,point_max=5,penalty="bic",seg_min=1,num_init=NULL,cpp
 #' Processing, vol. 65, no. 17, pp. 4495-4510, 2017.
 #' @param x The data to find change points with dimension N x D, must be matrix
 #' @param K The number of change points.
-#' @param num_init The number of repetition times, in order to avoid local minimal.
+#' @param num_init The number of repetition times, in order to avoid local minimum.
 #'                 Default is 10. Must be integer.
 #'
 #' @return

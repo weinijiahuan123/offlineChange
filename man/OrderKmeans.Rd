@@ -11,7 +11,7 @@ OrderKmeans(x, K = 4, num_init = 10)
 
 \item{K}{The number of change points.}
 
-\item{num_init}{The number of repetition times, in order to avoid local minimal.
+\item{num_init}{The number of repetition times, in order to avoid local minimum.
 Default is 10. Must be integer.}
 }
 \value{
