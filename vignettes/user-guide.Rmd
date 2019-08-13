@@ -1,7 +1,7 @@
 ---
 title: "User Guide for 'offlineChange' R package"
 author: "Jiahuan Ye, Jie Ding"
-date: "July 26, 2019"
+date: "August 12, 2019"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -30,7 +30,7 @@ Suppose there is a sequence of one-dimentional dependent data, and the true numb
 
 ```{r eval=FALSE}
 library(offlineChange)
-# Data
+# Create AR(2) data y with 1000 observations that has 2 change points: 100, 400
 N <- 1000
 N1 <- floor(0.1*N)
 N2 <- floor(0.3*N)
@@ -50,29 +50,44 @@ for (n in (L+1):N){
     y[n] <- y[(n-1):(n-L)] %*% a3 + c3 + rnorm(1)
   }
 }
+# Detect change points of y using window size 100, 50, 20, 10, 5 respectively
 result <- MultiWindow(y,
                       window_list = c(100,50,20,10,5),
                       point_max   = 5)
 ```
 The returned results contain the number of peak ranges and location of peak ranges:
 ```{r eval=FALSE}
-result$n_peak_range
-result$peak_range
+result$n_peak_range # number of peak ranges
+result$peak_range # ranges that contain change points
 ```
 
 The users can also modify some other default arguments:
 ```{r eval=FALSE}
-result <- MultiWindow(y, 
-                      window_list = c(100, 50, 20, 10, 5), 
-                      point_max   = 5,
-                      prior_range = NULL, 
-                      get_mle     = GetMle, 
-                      penalty     = c("bic","aic"), 
-                      seg_min     = 1, 
-                      num_init    = NULL, 
-                      tolerance   = 1,
-                      cpp         = TRUE,
-                      ret_score   = FALSE
+result <- MultiWindow(# The original data to find change points.
+                      y,    
+                      # The list of window sizes
+                      window_list = c(100, 50, 20, 10, 5),  
+                      # The largest candidate number of change points.
+                      point_max   = 5,    
+                      # The prior ranges that considered to contain change points.
+                      prior_range = NULL,  
+                      # The method used to transform dependent data to independent data.
+                      get_mle     = GetMle,   
+                      # Penalty type term. Default is "bic". 
+                      # Users can use other penalty term.
+                      penalty     = c("bic","aic","bc"),  
+                      # Minimal segment size between change points at transformed sacle.
+                      seg_min     = 1,   
+                      # The number of repetition times, in order to avoid local minimum.
+                      num_init    = NULL,  
+                      # The tolerance level. The maximal difference between the 
+                      # score of selected peak ranges and highest score.
+                      tolerance   = 1,    
+                      # Logical value indicating whether to accelerate using rcpp. 
+                      # Default is TRUE
+                      cpp         = TRUE,   
+                      # Logical value indicating whether to return score. Default is FALSE.
+                      ret_score   = FALSE                   
                       )
 ```
 The argument *cpp* indicates whether to increase computation speed using rcpp. The acceleration only works without prior range.
@@ -94,7 +109,7 @@ result <- MultiWindow(y,
 
 ChangePointsPlot(y,result,main="plot of change points")
 ```
-Or, users can plot the score that represents how likely the range contains change points. The higher score a range has, the more likely the range contains change point. The argument *ret_score* must be TRUE inorder to get score plot.
+Or, users can plot the score that represents how likely the range contains change points. The higher score a range has, the more likely the range contains change point. The argument *ret_score* must be TRUE in order to get score plot.
 ```{r eval=FALSE}
 result <- MultiWindow(y,
                       window_list = c(100,50,20,10,5),
@@ -156,7 +171,7 @@ result <- MultiWindow(X,
 ### Define your own penalty term with argument penalty
 Besides transformation function, users can also define peanlty terms they like. Be careful that, the penalty function is actually the sum of loss and penalty.
 ```{r eval=FALSE}
-toy_penatly=function(num_each, wgss, D, K, N) {
+toy_penalty=function(num_each, wgss, D, K, N) {
   penalty <- sum(num_each * log(wgss/num_each)) + 2 * D * K * log(N)
   return(penalty)
 }
@@ -211,7 +226,7 @@ And the users can also modify some default arguments:
 ```{r eval=FALSE}
 result <- ChangePoints(x,
                        point_max = 5,
-                       penalty   = c("bic","aic"),
+                       penalty   = c("bic","aic","bc"),
                        seg_min   = 1,
                        num_init  = NULL,
                        cpp       = TRUE)
@@ -226,7 +241,11 @@ result <- OrderKmeans(x, K = 2)
 ```
 And the users can also change the suggested setting of arguments:
 ```{r eval=FALSE}
-result <- OrderKmeans(x, K = 2, num_init=NULL)
+result <- OrderKmeans(x, K = 2, num_init=10)
+```
+And with rcpp acceleration, the codes can be:
+```{r eval=FALSE}
+result <- OrderKmeansCpp(x, K = 2)
 ```
 
 ## Detect change points of independent data with prior change ranges
@@ -239,5 +258,9 @@ result <- PriorRangeOrderKmeans(x, prior_range_x = list(l1,l2))
 ```
 And the users can also modify some default arguments:
 ```{r eval=FALSE}
-result <- PriorRangeOrderKmeans(x, prior_range_x, num_init=NULL)
+result <- PriorRangeOrderKmeans(x, prior_range_x, num_init=5)
+```
+And with rcpp acceleration, the codes can be:
+```{r eval=FALSE}
+result <- PriorRangeOrderKmeansCpp(x, prior_range_x)
 ```

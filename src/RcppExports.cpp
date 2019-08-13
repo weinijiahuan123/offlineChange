@@ -18,9 +18,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// PriorRangeOrderKmeansCpp
+List PriorRangeOrderKmeansCpp(NumericMatrix x, List prior_range_x, int num_init);
+RcppExport SEXP _offlineChange_PriorRangeOrderKmeansCpp(SEXP xSEXP, SEXP prior_range_xSEXP, SEXP num_initSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< List >::type prior_range_x(prior_range_xSEXP);
+    Rcpp::traits::input_parameter< int >::type num_init(num_initSEXP);
+    rcpp_result_gen = Rcpp::wrap(PriorRangeOrderKmeansCpp(x, prior_range_x, num_init));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_offlineChange_OrderKmeansCpp", (DL_FUNC) &_offlineChange_OrderKmeansCpp, 3},
+    {"_offlineChange_PriorRangeOrderKmeansCpp", (DL_FUNC) &_offlineChange_PriorRangeOrderKmeansCpp, 3},
     {NULL, NULL, 0}
 };
 

@@ -5,3 +5,7 @@ OrderKmeansCpp <- function(x, K = 4L, num_init = 10L) {
     .Call('_offlineChange_OrderKmeansCpp', PACKAGE = 'offlineChange', x, K, num_init)
 }
 
+PriorRangeOrderKmeansCpp <- function(x, prior_range_x, num_init = 10L) {
+    .Call('_offlineChange_PriorRangeOrderKmeansCpp', PACKAGE = 'offlineChange', x, prior_range_x, num_init)
+}
+

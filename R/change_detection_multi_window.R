@@ -30,10 +30,12 @@
 #' @param get_mle The method used to transform dependent data to independent
 #'   data.
 #' @param penalty Penalty type term. Default is "bic". Users can use other penalty term.
-#' @param seg_min Minimal segment size, must be positive integer.
+#' @param seg_min Minimal segment size between change points at transformed sacle, 
+#'  must be positive integer.
 #' @param num_init The number of repetition times, in order to avoid local
-#'   minimal. Default is squared root of number of transformed data.
-#' @param tolerance The tolerance level. The selected narrow ranges are with
+#'   minimum. Default is squared root of number of transformed data.
+#' @param tolerance The tolerance level. The maximal difference between the score of 
+#'   selected peak ranges and highest score.
 #' @param cpp Logical value indicating whether to accelerate using rcpp. Default is TRUE.
 #' @param ret_score Logical value indicating whether to return score. Default is FALSE.
 #' 
@@ -116,7 +118,11 @@ MultiWindow <- function(y,
       #print("range")
       #print(dim(x_transformed))
       #test
-      change_point<-PriorRangeOrderKmeans(x,prior_range_x=trans_prior_range,num_init=num_init)$change_point
+      if (cpp == TRUE) {
+        change_point<-PriorRangeOrderKmeansCpp(x,prior_range_x=trans_prior_range,num_init=num_init)$change_point
+      } else {
+        change_point<-PriorRangeOrderKmeans(x,prior_range_x=trans_prior_range,num_init=num_init)$change_point
+      }
     }
     # Map the change points of transformed data to original data and get score the change points.
     if (r==1){
