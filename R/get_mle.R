@@ -38,7 +38,7 @@ GetMle<- function(y, window_size) {
   N <- length(y)
   n_window <- ceiling(N/window_size)
   L <- 2 # Lag order of the dataset
-  x <- matrix(0, nrow = n_window, ncol = L+1)
+  #x <- matrix(0, nrow = n_window, ncol = L+1)
   EstimateAr <- function(x,T1,T2,L){
     if (T1 > (T2 - L)) {
       stop("Lag is too big")
@@ -63,6 +63,21 @@ GetMle<- function(y, window_size) {
     #test
     #test
     #get estimated coefficients including constant
+    T1 <- 1+(n-1)*window_size
+    T2 <- min(n*window_size,N)
+    if (n == n_window - 1) {
+      T1_next <- 1+n * window_size
+      T2_next <- min(n * window_size, N)
+      if (T1_next > (T2_next - L)) {
+        est <- EstimateAr(y,1+(n-1)*window_size, N, L)
+        if (n==1) {
+          x <- t(est$C)
+        } else {
+          x <- rbind(x,t(est$C))
+        }
+        break
+      }
+    }
     est <- EstimateAr(y,1+(n-1)*window_size,min(n*window_size,N),L)
     #transform original data to transformed data which is the estimated coefficients
     if (n==1) {

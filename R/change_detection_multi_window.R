@@ -88,7 +88,7 @@ MultiWindow <- function(y,
     #r=1
     #test
     window_size <- window_list[r]
-    n_window <- ceiling(len/window_size)
+    #n_window <- ceiling(len/window_size)
     # Get transformed approximated independent data
     x <- get_mle(y, window_size=window_size)
     # if the data is a list, transform it into matrix
