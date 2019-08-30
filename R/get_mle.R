@@ -65,7 +65,7 @@ GetMle<- function(y, window_size) {
     #get estimated coefficients including constant
     T1 <- 1+(n-1)*window_size
     T2 <- min(n*window_size,N)
-    if (n == n_window - 1) {
+    if (n == (n_window - 1)) {
       T1_next <- 1+n * window_size
       T2_next <- min(n * window_size, N)
       if (T1_next > (T2_next - L)) {
