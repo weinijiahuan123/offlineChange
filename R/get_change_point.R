@@ -102,5 +102,5 @@ GetLogLik <- function(y, left, right) {
   C <- solve(A)%*%B
   e <- y[left:right]-t(Y)%*%C
   sigma2 <- sum(e^2)/(right-left+1)
-  log_lik <- (right-left)*log(sigma2)
+  log_lik <- (right-left+1)*log(sigma2)
 }
