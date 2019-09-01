@@ -130,30 +130,18 @@ MultiWindow <- function(y,
       }
     }
     # Map the change points of transformed data to original data and get score the change points.
-    if (r==1){
-      for (k in 1:(length(change_point))) {
-        if (k > 1) {
-          if ((change_point[k] - change_point[k-1]) == 1) {
-            score[(1+change_point[k]*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+change_point[k]*window_size):min((change_point[k]+1)*window_size,len),r]+1
-          } else {
-            score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1)*window_size,len),r]+1
-          }
-        } else {
-          score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1)*window_size,len),r]+1
-        }
-      }
-    } else {
+    if (r > 1){
       score[1:len,r] <- score[1:len,r-1]
-      for (k in 1:(length(change_point))) {
-        if (k > 1) {
-          if ((change_point[k] - change_point[k-1]) == 1) {
-            score[(1+change_point[k]*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+change_point[k]*window_size):min((change_point[k]+1)*window_size,len),r]+1
-          } else {
-            score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1)*window_size,len),r]+1
-          }
+    }
+    for (k in 1:(length(change_point))) {
+      if (k > 1) {
+        if ((change_point[k] - change_point[k-1]) == 1) {
+          score[(1+change_point[k]*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+change_point[k]*window_size):min((change_point[k]+1)*window_size,len),r]+1
         } else {
           score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1)*window_size,len),r]+1
         }
+      } else {
+        score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1)*window_size,len),r]+1
       }
     }
   }
