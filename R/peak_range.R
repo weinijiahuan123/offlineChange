@@ -32,7 +32,9 @@ PeakRange<-function(score,tolerance=1,point_max=5) {
   if (tolerance > S) {
     warning("Tolerance is too large!")
   }
+  
   for (r in R:1) {
+    score[,r]<-ifelse(score[,r] > (S-tolerance), S-tolerance, score[,r])
     J<-list()
     # store number of unions
     num<-0
