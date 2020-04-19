@@ -83,9 +83,7 @@ MultiWindow <- function(y,
   n_window_type <- length(window_list)
   # initialize score matrix
   score <- matrix(0,nrow=len,ncol=n_window_type)
-  cat("max1:",max(score))
   for (r in 1:n_window_type) {
-    cat("r:",r)
     #test
     #r=1
     #test
@@ -102,12 +100,8 @@ MultiWindow <- function(y,
       num_init <- floor(sqrt(dim(x)[1]))
     }
     if (is.null(prior_range)) {
-      #test
-      #print("change_point")
-      #test
       # Get the change points of transformed data
       change_point <- ChangePoints(x,point_max=point_max,penalty=penalty,seg_min=1,num_init=num_init,cpp=cpp)$change_point
-      cat("change_point1:", change_point)
     } else {
       # Transform prior_range to transformed_range according to window size
       trans_prior_range <- list()
@@ -117,16 +111,11 @@ MultiWindow <- function(y,
         transformed_range[2] <- ceiling(prior_range[[i]][2]/window_size)
         trans_prior_range[[i]] <- transformed_range
       }
-      #test
-      #print("range")
-      #print(dim(x_transformed))
-      #test
       if (cpp == TRUE) {
         change_point<-PriorRangeOrderKmeansCpp(x,prior_range_x=trans_prior_range,num_init=num_init)$change_point
         cat("change_point:", change_point)
       } else {
         change_point<-PriorRangeOrderKmeans(x,prior_range_x=trans_prior_range,num_init=num_init)$change_point
-        cat("change_point2:", change_point)
       }
     }
     # Map the change points of transformed data to original data and get score the change points.
@@ -152,8 +141,6 @@ MultiWindow <- function(y,
   result <- list(n_peak_range=peakranges$n_peak_range, peak_range=peakranges$peak_range)
   if (ret_score) {
    result$score <- score
-   cat("max3:", max(score))
   }
   return(result)
-  #return(score)
 }
