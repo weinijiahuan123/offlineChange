@@ -4,10 +4,19 @@
 \alias{MultiWindow}
 \title{Multi-window Change Points Detection}
 \usage{
-MultiWindow(y, window_list = c(100, 50, 20, 10, 5), point_max = 5,
-  prior_range = NULL, get_mle = GetMle, penalty = "bic",
-  seg_min = 1, num_init = NULL, tolerance = 1, cpp = TRUE,
-  ret_score = FALSE)
+MultiWindow(
+  y,
+  window_list = c(100, 50, 20, 10, 5),
+  point_max = 5,
+  prior_range = NULL,
+  get_mle = GetMle,
+  penalty = "bic",
+  seg_min = 1,
+  num_init = NULL,
+  tolerance = 1,
+  cpp = TRUE,
+  ret_score = FALSE
+)
 }
 \arguments{
 \item{y}{The original data to find change points. Must be one dimensional

@@ -4,8 +4,14 @@
 \alias{ChangePoints}
 \title{Detect Number and Location of Change Points of Independent Data}
 \usage{
-ChangePoints(x, point_max = 5, penalty = "bic", seg_min = 1,
-  num_init = NULL, cpp = TRUE)
+ChangePoints(
+  x,
+  point_max = 5,
+  penalty = "bic",
+  seg_min = 1,
+  num_init = NULL,
+  cpp = TRUE
+)
 }
 \arguments{
 \item{x}{The data to find change points.}
