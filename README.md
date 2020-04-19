@@ -23,7 +23,7 @@ A quick guide of package can be found [here](https://github.com/JieGroup/offline
 
 ## Reference Papers
 
-J. Ding, Y. Xiang, L. Shen, V. Tarokh, "Multiple Change Point Analysis: Fast Implementation and Strong Consistency,"  IEEE Transactions on Signal Processing, 2017. [link](http://jding.org/jie-uploads/2018/11/cp.pdf) 
+Ding, J., Xiang, Y., Shen, L., & Tarokh, V. (2017). Multiple change point analysis: Fast implementation and strong consistency. IEEE Transactions on Signal Processing, 65(17), 4495-4510. [link](http://jding.org/jie-uploads/2018/11/cp.pdf) 
 
 J. Ding, "Multi-window method for unsupervised learning," preprint, 2019.
 
