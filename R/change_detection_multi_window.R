@@ -40,6 +40,7 @@
 #' @param ret_score Logical value indicating whether to return score. Default is FALSE.
 #' 
 #' @importFrom Rcpp evalCpp
+#' @importFrom methods is
 #' @return
 #'   \item{n_peak_range}{The number of peak ranges.}
 #'   \item{peak_ranges}{The location of peak ranges.}
@@ -92,7 +93,7 @@ MultiWindow <- function(y,
     # Get transformed approximated independent data
     x <- get_mle(y, window_size=window_size)
     # if the data is a list, transform it into matrix
-    if (class(x) != "matrix") {
+    if (!is(x, "matrix")) {
       x <- as.matrix(x)
     }
     # set the random initialization times

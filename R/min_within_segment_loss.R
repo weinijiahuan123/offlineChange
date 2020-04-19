@@ -136,6 +136,7 @@ ChangePoints <- function(x,point_max=5,penalty="bic",seg_min=1,num_init=NULL,cpp
 #' @param K The number of change points.
 #' @param num_init The number of repetition times, in order to avoid local minimum.
 #'                 Default is 10. Must be integer.
+#' @importFrom methods is
 #'
 #' @return
 #'         \item{wgss_sum}{total within segment sum of squared distances to the segment
@@ -152,7 +153,7 @@ ChangePoints <- function(x,point_max=5,penalty="bic",seg_min=1,num_init=NULL,cpp
 #' OrderKmeans(x,K=3)
 #' OrderKmeans(x,K=3,num_init=8)
 OrderKmeans <- function(x, K=4, num_init=10) {
-  if (class(x) != "matrix") {
+  if (!is(x, "matrix")) {
     stop("Dataset must be matrix form!")
   }
   N<-dim(x)[1] # number of observations

@@ -18,6 +18,7 @@
 #' @param num_init The number of repetition times, in order to avoid local minimal.
 #'                 Default is 10. Must be integer.
 #' @import stats
+#' @importFrom methods is
 #'
 #' @return
 #'         \item{num_change_point}{optimal number of change points.}
@@ -34,7 +35,7 @@
 #' prior_range_x<-list(l1,l2)
 #' PriorRangeOrderKmeans(x,prior_range_x=list(l1,l2))
 PriorRangeOrderKmeans<-function(x,prior_range_x,num_init=10) {
-  if (class(x) != "matrix") {
+  if (!is(x, "matrix")) {
     stop("Dataset must be matrix form!")
   }
   N<-dim(x)[1] # number of observations
