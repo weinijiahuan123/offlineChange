@@ -114,7 +114,6 @@ MultiWindow <- function(y,
       }
       if (cpp == TRUE) {
         change_point<-PriorRangeOrderKmeansCpp(x,prior_range_x=trans_prior_range,num_init=num_init)$change_point
-        cat("change_point:", change_point)
       } else {
         change_point<-PriorRangeOrderKmeans(x,prior_range_x=trans_prior_range,num_init=num_init)$change_point
       }
