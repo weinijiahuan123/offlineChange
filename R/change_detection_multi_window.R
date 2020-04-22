@@ -125,7 +125,9 @@ MultiWindow <- function(y,
     for (k in 1:(length(change_point))) {
       if (k > 1) {
         if ((change_point[k] - change_point[k-1]) == 1) {
-          score[(1+change_point[k]*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+change_point[k]*window_size):min((change_point[k]+1)*window_size,len),r]+1
+          if (min((change_point[k]+1) * window_size,len) < len) {
+            score[(1+change_point[k]*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+change_point[k]*window_size):min((change_point[k]+1)*window_size,len),r]+1
+          }
         } else {
           score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1) * window_size,len),r]<-score[(1+(change_point[k]-1)*window_size):min((change_point[k]+1)*window_size,len),r]+1
         }
